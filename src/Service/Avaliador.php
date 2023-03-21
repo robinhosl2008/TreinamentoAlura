@@ -10,7 +10,7 @@ class Avaliador
     protected $maiorValor = -INF;
     /** @var float */
     protected $menorValor = INF;
-    protected $maioresLances = null;
+    protected $maioresLances = [];
     
     public function avalia(Leilao $leilao): void
     {
@@ -25,9 +25,11 @@ class Avaliador
         }
 
         $lances = $leilao->recuperaLances();
+
         usort($lances, function($a, $b) {
-            return $a->recuperaValor - $b->recuperaValor;
+            return $b->recuperaValor() - $a->recuperaValor();
         });
+
         $this->maioresLances = array_slice($lances, 0, 3);
     }
 

@@ -3,7 +3,7 @@
   "type": "project",
   "license": "MIT",
   "scripts": {
-    "test": "vendor/bin/phpunit tests --colors"
+    "test": "vendor/bin/phpunit tests"
   },
   "autoload": {
     "psr-4": {
