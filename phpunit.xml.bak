@@ -11,9 +11,5 @@
             <directory>tests</directory>
         </testsuite>
     </testsuites>
-    <logging>
-        <testdoxHtml outputFile="tests/coverage.html" />
-        <!-- <testdoxXml outputFile="tests/coverage.xml"/>
-        <text outputFile="tests/coverage.txt"/> -->
-    </logging>
+    <logging/>
 </phpunit>
