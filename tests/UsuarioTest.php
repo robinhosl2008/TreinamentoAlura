@@ -1,6 +1,6 @@
 <?php
 
-namespace Alura\Leilao\Tests\Usuario;
+namespace Alura\Leilao\Tests;
 
 use BoasPraticas\Leilao\Model\Usuario;
 use PHPUnit\Framework\TestCase;

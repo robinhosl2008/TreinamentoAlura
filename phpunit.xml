@@ -12,7 +12,7 @@
         </testsuite>
     </testsuites>
     <logging>
-        <testdoxHtml outputFile="tests/coverage.html" />
+        <testdoxHtml outputFile="tests/log/coverage.html" />
         <!-- <testdoxXml outputFile="tests/coverage.xml"/>
         <text outputFile="tests/coverage.txt"/> -->
     </logging>
