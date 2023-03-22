@@ -7,17 +7,16 @@ use PHPUnit\Framework\TestCase;
 
 class UsuarioTest extends TestCase
 {
-    public function testVerificaSeAdicionouNomeUsuarioErrado()
+    private $nome;
+    
+    public function setUp(): void
     {
         $usuario = new Usuario("Robson");
-
-        self::assertNotEquals("robson", $usuario->recuperaNome());
+        $this->nome = $usuario->recuperaNome();
     }
 
     public function testVerificaSeAdicionouNomeUsuarioCorreto()
     {
-        $usuario = new Usuario("Robson");
-
-        self::assertEquals("Robson", $usuario->recuperaNome());
+        self::assertEquals("Robson", $this->nome);
     }
 }
