@@ -11,6 +11,8 @@ class Leilao
     private $lances;
     /** @var string */
     private $descricao;
+    /** @var bool */
+    private $finalizado = false;
 
     public function __construct(string $descricao)
     {
@@ -73,5 +75,15 @@ class Leilao
     public function recuperaDescricao(): string
     {
         return $this->descricao;
+    }
+
+    public function finalizaLeilao()
+    {
+        $this->finalizado = true;
+    }
+
+    public function recuperaStatus()
+    {
+        return $this->finalizado;
     }
 }

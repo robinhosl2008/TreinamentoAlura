@@ -3,6 +3,7 @@
 namespace BoasPraticas\Leilao\Service;
 
 use BoasPraticas\Leilao\Model\Leilao;
+use DomainException;
 
 class Avaliador
 {
@@ -14,8 +15,12 @@ class Avaliador
     
     public function avalia(Leilao $leilao): void
     {
+        if ($leilao->recuperaStatus()) {
+            throw new DomainException("Leiloeiro não pode avaliar um leilão que já foi finalizado.");
+        }
+
         if (empty($leilao->recuperaLances())) {
-            throw new \DomainException("Não é possível avaliar um leilão vazio.");
+            throw new DomainException("Não é possível avaliar um leilão vazio.");
         }
 
         foreach ($leilao->recuperaLances() as $lance) {

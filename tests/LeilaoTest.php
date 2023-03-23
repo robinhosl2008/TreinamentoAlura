@@ -5,6 +5,7 @@ namespace Alura\Leilao\Tests;
 use BoasPraticas\Leilao\Model\Leilao;
 use BoasPraticas\Leilao\Model\Lance;
 use BoasPraticas\Leilao\Model\Usuario;
+use BoasPraticas\Leilao\Service\Avaliador;
 use DomainException;
 use PHPUnit\Framework\TestCase;
 
@@ -71,5 +72,16 @@ class LeilaoTest extends TestCase
         
         self::assertCount(10, $this->leilao->recuperaLances());
         self::assertEquals(5500, $this->leilao->recuperaLances()[array_key_last($this->leilao->recuperaLances())]->recuperaValor());
+    }
+
+    public function testLeilaoFinalizadoNaoPodeSerAvaliado()
+    {
+        self::expectException(DomainException::class);
+        self::expectExceptionMessage("Leiloeiro não pode avaliar um leilão que já foi finalizado.");
+
+        $this->leilao->finalizaLeilao();
+
+        $leiloeiro = new Avaliador();
+        $leiloeiro->avalia($this->leilao);
     }
 }
