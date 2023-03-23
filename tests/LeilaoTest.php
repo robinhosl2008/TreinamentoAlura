@@ -63,5 +63,6 @@ class LeilaoTest extends TestCase
         $this->leilao->recebeLance(new Lance(new Usuario("usuario2"), 7500));
         
         self::assertCount(10, $this->leilao->recuperaLances());
+        self::assertEquals(5500, $this->leilao->recuperaLances()[array_key_last($this->leilao->recuperaLances())]->recuperaValor());
     }
 }
