@@ -1,6 +1,6 @@
 <?php
 
-namespace Alura\Leilao\Tests;
+namespace BoasPraticas\Leilao\Leilao\Tests;
 
 use BoasPraticas\Leilao\Model\Usuario;
 use BoasPraticas\Leilao\Model\Lance;
@@ -10,7 +10,8 @@ use PHPUnit\Framework\TestCase;
 
 class AvaliadorTest extends TestCase
 {
-    private $leiloeiro;
+    /** @var Avaliador */
+    private $avaliador;
     
     /**
      * Esse método é protegido e deve retornar void.
@@ -18,7 +19,7 @@ class AvaliadorTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->leiloeiro = new Avaliador();
+        $this->avaliador = new Avaliador();
     }
 
     /**
@@ -26,14 +27,13 @@ class AvaliadorTest extends TestCase
      * @dataProvider leilaoEmOrdemDecrescente
      * @dataProvider leilaoEmOrdemAleatoria
      */
-    public function testAvaliadorEncontraMaiorValorEntreLances($leilao)
+    public function testAvaliadorEncontraMaiorValorEntreLances(Leilao $leilao)
     {
         // Act
-        $this->leiloeiro->avalia($leilao);
-        $maiorValor = $this->leiloeiro->recuperaMaiorValor();
+        $this->avaliador->avalia($leilao);
 
         // Assert
-        self::assertEquals(2900, $maiorValor);
+        self::assertEquals(2900, $this->avaliador->recuperaMaiorValor());
     }
     
     /**
@@ -41,11 +41,11 @@ class AvaliadorTest extends TestCase
      * @dataProvider leilaoEmOrdemDecrescente
      * @dataProvider leilaoEmOrdemAleatoria
      */
-    public function testAvaliadorEncontraMenorValorEntreLances($leilao)
+    public function testAvaliadorEncontraMenorValorEntreLances(Leilao $leilao)
     {
         // Act
-        $this->leiloeiro->avalia($leilao);
-        $maiorValor = $this->leiloeiro->recuperaMenorValor();
+        $this->avaliador->avalia($leilao);
+        $maiorValor = $this->avaliador->recuperaMenorValor();
 
         // Assert
         self::assertEquals(800, $maiorValor);
@@ -56,12 +56,12 @@ class AvaliadorTest extends TestCase
      * @dataProvider leilaoEmOrdemDecrescente
      * @dataProvider leilaoEmOrdemAleatoria
      */
-    public function testAvaliadorEncontraMaioresValoresEntreLances($leilao)
+    public function testAvaliadorEncontraMaioresValoresEntreLances(Leilao $leilao)
     {
         // Act
-        $this->leiloeiro->avalia($leilao);
+        $this->avaliador->avalia($leilao);
 
-        $maioresLances = $this->leiloeiro->recuperaMaioresLances();
+        $maioresLances = $this->avaliador->recuperaMaioresLances();
 
         static::assertCount(3, $maioresLances);
         static::assertEquals($maioresLances[0]->recuperaValor(), $maioresLances[0]->recuperaValor());
