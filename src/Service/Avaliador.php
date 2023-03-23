@@ -14,6 +14,10 @@ class Avaliador
     
     public function avalia(Leilao $leilao): void
     {
+        if (empty($leilao->recuperaLances())) {
+            throw new \DomainException("Não é possível avaliar um leilão vazio.");
+        }
+
         foreach ($leilao->recuperaLances() as $lance) {
             if ($lance->recuperaValor() > $this->maiorValor) {
                 $this->maiorValor = $lance->recuperaValor();

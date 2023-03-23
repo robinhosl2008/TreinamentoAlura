@@ -6,10 +6,12 @@ use BoasPraticas\Leilao\Model\Usuario;
 use BoasPraticas\Leilao\Model\Lance;
 use BoasPraticas\Leilao\Model\Leilao;
 use BoasPraticas\Leilao\Service\Avaliador;
+use DomainException;
 use PHPUnit\Framework\TestCase;
 
 class AvaliadorTest extends TestCase
 {
+    /** @var Avaliador */
     private $leiloeiro;
     
     /**
@@ -67,6 +69,14 @@ class AvaliadorTest extends TestCase
         static::assertEquals($maioresLances[0]->recuperaValor(), $maioresLances[0]->recuperaValor());
         static::assertEquals($maioresLances[1]->recuperaValor(), $maioresLances[1]->recuperaValor());
         static::assertEquals($maioresLances[2]->recuperaValor(), $maioresLances[2]->recuperaValor());
+    }
+
+    public function testAvaliaSeLeilaoEstaVazio()
+    {
+        self::expectException(DomainException::class);
+        self::expectExceptionMessage("Não é possível avaliar um leilão vazio.");
+        $leilao = new Leilao("Fusca Azul");
+        $this->leiloeiro->avalia($leilao);
     }
 
     /** Dados */

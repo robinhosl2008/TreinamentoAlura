@@ -5,6 +5,7 @@ namespace Alura\Leilao\Tests;
 use BoasPraticas\Leilao\Model\Leilao;
 use BoasPraticas\Leilao\Model\Lance;
 use BoasPraticas\Leilao\Model\Usuario;
+use DomainException;
 use PHPUnit\Framework\TestCase;
 
 class LeilaoTest extends TestCase
@@ -38,8 +39,11 @@ class LeilaoTest extends TestCase
         self::assertEquals("object", gettype($lances[0]));
     }
 
-    public function testVerificaQueLeilaoNaoRecebaMaisDeUmLance()
+    public function testVerificaQueLeilaoNaoRecebaLancesEmSequenciaDoMesmoUsuario()
     {
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage("Usuário não pode dar dois lances seguidos.");
+
         $novoLance = new Lance($this->usuario, 1200);
         $this->leilao->recebeLance($novoLance);
 
@@ -48,6 +52,9 @@ class LeilaoTest extends TestCase
 
     public function testNaoPermitirMaisDeCincoLancesPorUsuarioNoMesmoLeilao()
     {
+        self::expectException(DomainException::class);
+        self::expectExceptionMessage("Usuário não pode dar mais de 5 lances no mesmo leilão.");
+
         $this->leilao->recebeLance(new Lance(new Usuario("usuario2"), 1500));
         $this->leilao->recebeLance(new Lance($this->usuario, 2000));
         $this->leilao->recebeLance(new Lance(new Usuario("usuario2"), 2500));
