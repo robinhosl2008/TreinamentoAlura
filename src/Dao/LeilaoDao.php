@@ -25,11 +25,28 @@ class LeilaoDao
      */
     public function salva(Leilao $leilao): void
     {
-        $sql = 'INSERT INTO leiloes (descricao, finalizado, dataInicio) VALUES (?, ?, ?)';
+        $sql = 'INSERT INTO leilao (descricao, finalizado, dataInicio) VALUES (?, ?, ?)';
         $stm = $this->con->prepare($sql);
         $stm->bindValue(1, $leilao->recuperaDescricao(), \PDO::PARAM_STR);
         $stm->bindValue(2, $leilao->recuperaStatusLeilao(), \PDO::PARAM_BOOL);
         $stm->bindValue(3, $leilao->recuperarDataInicio()->format('Y-m-d'));
+        $stm->execute();
+    }
+
+    /**
+     * Remove os leilões da base de dados;
+     *
+     * @param string $str Texto utilizado na busca pela descrição do leilão.
+     * @param int $id ID do leilão.
+     * @return void
+     **/
+    public function removeLeiloes(string $str = null, int $id = null): void
+    {
+        $str = ($str != null) ? "AND descricao LIKE '%$str%'" : "";
+        $id = ($id != null) ? "AND id = $id" : "";
+
+        $sql = "DELETE FROM leilao WHERE finalizado = 1 $str $id";
+        $stm = $this->con->prepare($sql);
         $stm->execute();
     }
 
@@ -44,17 +61,17 @@ class LeilaoDao
     /**
      * @return Leilao[]
      */
-    public function recuperarFinalizados(): array
+    public function recuperarFinalizados(string $str): array
     {
-        return $this->recuperarLeiloesSeFinalizado(true);
+        return $this->recuperarLeiloesSeFinalizado(true, $str);
     }
 
     /**
      * @return Leilao[]
      */
-    private function recuperarLeiloesSeFinalizado(bool $finalizado): array
-    {
-        $sql = 'SELECT * FROM leiloes WHERE finalizado = ' . ($finalizado ? 1 : 0);
+    private function recuperarLeiloesSeFinalizado(bool $finalizado, string $str = null): array
+    {// ' . ($str != null ? "descricao LIKE '%{$str}%'" : "") . ' 
+        $sql = 'SELECT * FROM leilao WHERE finalizado = ' . ($finalizado ? 1 : 0);
         $stm = $this->con->query($sql, \PDO::FETCH_ASSOC);
 
         $dados = $stm->fetchAll();
@@ -72,7 +89,7 @@ class LeilaoDao
 
     public function atualiza(Leilao $leilao)
     {
-        $sql = 'UPDATE leiloes SET descricao = :descricao, dataInicio = :dataInicio, finalizado = :finalizado WHERE id = :id';
+        $sql = 'UPDATE leilao SET descricao = :descricao, dataInicio = :dataInicio, finalizado = :finalizado WHERE id = :id';
         $stm = $this->con->prepare($sql);
         $stm->bindValue(':descricao', $leilao->recuperaDescricao());
         $stm->bindValue(':dataInicio', $leilao->recuperarDataInicio()->format('Y-m-d'));

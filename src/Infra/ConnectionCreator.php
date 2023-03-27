@@ -9,7 +9,7 @@ class ConnectionCreator
     public static function getConnection(): \PDO
     {
         if (is_null(self::$pdo)) {
-            $caminhoBanco = __DIR__ . '/../../banco.sqlite';
+            $caminhoBanco = '/home/robson/PHP/boas-praticas/TreinamentoAlura/leilao.db';
             self::$pdo = new \PDO('sqlite:' . $caminhoBanco);
             self::$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         }
