@@ -6,15 +6,25 @@ use BoasPraticas\Leilao\Dao\LeilaoDao;
 
 class Encerrador
 {
+    /** @var LeilaoDao */
+    protected $dao;
+
+    /**
+     * Método construtor.
+     **/
+    public function __construct(LeilaoDao $dao)
+    {
+        $this->dao = $dao;
+    }
+
     public function encerra()
     {
-        $dao = new LeilaoDao();
-        $leiloes = $dao->recuperarNaoFinalizados();
+        $leiloes = $this->dao->recuperarNaoFinalizados();
 
         foreach ($leiloes as $leilao) {
             if ($leilao->temMaisDeUmaSemana()) {
                 $leilao->finalizaLeilao();
-                $dao->atualiza($leilao);
+                $this->dao->atualiza($leilao);
             }
         }
     }
