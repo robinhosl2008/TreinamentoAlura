@@ -1,6 +1,6 @@
 <?php
 
-namespace BoasPraticas\Leilao\Tests;
+namespace BoasPraticas\Leilao\Tests\Unit;
 
 use BoasPraticas\Leilao\Dao\LeilaoDao;
 use BoasPraticas\Leilao\Model\Leilao;

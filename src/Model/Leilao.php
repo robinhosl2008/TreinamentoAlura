@@ -106,6 +106,11 @@ class Leilao
         return $intervalo->days > 7;
     }
 
+    public function insereId(int $id): void
+    {
+        $this->id = $id;
+    }
+
     public function recuperarId(): int
     {
         return $this->id;

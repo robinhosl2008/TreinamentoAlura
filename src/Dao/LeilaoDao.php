@@ -4,6 +4,7 @@ namespace BoasPraticas\Leilao\Dao;
 
 use BoasPraticas\Leilao\Infra\ConnectionCreator;
 use BoasPraticas\Leilao\Model\Leilao;
+use PDO;
 
 /**
  * Summary of Leilao
@@ -12,10 +13,14 @@ class LeilaoDao
 {
     private $con;
 
-    public function __construct()
+    public function __construct(PDO $pdo = null)
     {
-        $connector = new ConnectionCreator();
-        $this->con = $connector->getConnection();
+        if ($pdo == null) {
+            $connector = new ConnectionCreator();
+            $pdo = $connector->getConnection();
+        }
+
+        $this->con = $pdo;
     }
 
     /**
@@ -31,6 +36,7 @@ class LeilaoDao
         $stm->bindValue(2, $leilao->recuperaStatusLeilao(), \PDO::PARAM_BOOL);
         $stm->bindValue(3, $leilao->recuperarDataInicio()->format('Y-m-d'));
         $stm->execute();
+        $leilao->insereId($this->con->lastInsertId());
     }
 
     /**
@@ -53,26 +59,26 @@ class LeilaoDao
     /**
      * @return Leilao[]
      */
-    public function recuperarNaoFinalizados(): array
+    public function recuperarNaoFinalizados(string $filtro = null): array
     {
-        return $this->recuperarLeiloesSeFinalizado(false);
+        return $this->recuperarLeiloesSeFinalizado(false, $filtro);
     }
 
     /**
      * @return Leilao[]
      */
-    public function recuperarFinalizados(string $str): array
+    public function recuperarFinalizados(string $filtro = null): array
     {
-        return $this->recuperarLeiloesSeFinalizado(true, $str);
+        return $this->recuperarLeiloesSeFinalizado(true, $filtro);
     }
 
     /**
      * @return Leilao[]
      */
-    private function recuperarLeiloesSeFinalizado(bool $finalizado, string $str = null): array
-    {// ' . ($str != null ? "descricao LIKE '%{$str}%'" : "") . ' 
-        $sql = 'SELECT * FROM leilao WHERE finalizado = ' . ($finalizado ? 1 : 0);
-        $stm = $this->con->query($sql, \PDO::FETCH_ASSOC);
+    public function recuperarLeiloesSeFinalizado(bool $finalizado, string $filtro = null): array
+    {
+        $sql = 'SELECT * FROM leilao WHERE finalizado = ' . ($finalizado ? 1 : 0) . ($filtro ? $filtro : "");
+        $stm = $this->con->query($sql, PDO::FETCH_ASSOC);
 
         $dados = $stm->fetchAll();
         $leiloes = [];
